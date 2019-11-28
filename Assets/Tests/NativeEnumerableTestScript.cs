@@ -11,9 +11,9 @@ namespace Tests
     }
 
     [TestCase(0L)]
-    [TestCase(-10L)]
-    [TestCase(-12241L)]
-    [TestCase(long.MinValue)]
+    // [TestCase(-10L)]
+    // [TestCase(-12241L)]
+    // [TestCase(long.MinValue)]
     public void ZeroOrNegativeCountTest(long a)
     {
       
@@ -30,11 +30,11 @@ namespace Tests
     // [TestCase(0, Allocator.Persistent)]
     // [TestCase(1, Allocator.Persistent)]
     // [TestCase(10, Allocator.Persistent)]
-    // [TestCase(114514, Allocator.Persistent)]
-    // public void FromNativeArrayPass(int count, Allocator allocator)
-    // {
+    [TestCase(114514, Allocator.Persistent)]
+    public void FromNativeArrayPass(int count, Allocator allocator)
+    {
       
-    // }
+    }
 
     // [TestCase(0, Allocator.Temp)]
     // [TestCase(114, Allocator.Temp)]
@@ -44,10 +44,10 @@ namespace Tests
     // [TestCase(114514, Allocator.TempJob)]
     // [TestCase(0, Allocator.Persistent)]
     // [TestCase(114, Allocator.Persistent)]
-    // [TestCase(114514, Allocator.Persistent)]
-    // public void IEnumerableTest(int count, Allocator allocator)
-    // {
+    [TestCase(114514, Allocator.Persistent)]
+    public void IEnumerableTest(int count, Allocator allocator)
+    {
       
-    // }
+    }
   }
 }
