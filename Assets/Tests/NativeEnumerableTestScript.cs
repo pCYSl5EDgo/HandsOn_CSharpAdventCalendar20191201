@@ -33,15 +33,15 @@ namespace Tests
     [TestCase(0, Allocator.Temp)]
     [TestCase(1, Allocator.Temp)]
     [TestCase(10, Allocator.Temp)]
-    [TestCase(114514, Allocator.Temp)]
+    [TestCase(114, Allocator.Temp)]
     [TestCase(0, Allocator.TempJob)]
     [TestCase(1, Allocator.TempJob)]
     [TestCase(10, Allocator.TempJob)]
-    [TestCase(114514, Allocator.TempJob)]
+    [TestCase(114, Allocator.TempJob)]
     [TestCase(0, Allocator.Persistent)]
     [TestCase(1, Allocator.Persistent)]
     [TestCase(10, Allocator.Persistent)]
-    [TestCase(114514, Allocator.Persistent)]
+    [TestCase(114, Allocator.Persistent)]
     public void FromNativeArrayPass(int count, Allocator allocator)
     {
       using (var array = new NativeArray<int>(count, allocator))
@@ -53,8 +53,8 @@ namespace Tests
           Assert.AreEqual(0, nativeEnumerable[i]);
           nativeEnumerable[i] = i;
         }
-      //   for (var i = 0; i < count; i++)
-      //     Assert.AreEqual(i, array[i]);
+        for (var i = 0; i < count; i++)
+          Assert.AreEqual(i, array[i]);
       }
     }
 
