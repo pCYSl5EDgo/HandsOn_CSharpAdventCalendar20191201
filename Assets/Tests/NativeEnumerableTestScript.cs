@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using Unity.Collections;
+using UniNativeLinq;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace Tests
 {
