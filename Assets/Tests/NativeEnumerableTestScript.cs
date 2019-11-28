@@ -69,7 +69,22 @@ namespace Tests
     [TestCase(114514, Allocator.Persistent)]
     public void IEnumerableTest(int count, Allocator allocator)
     {
-      
+      using (var array = new NativeArray<long>(count, allocator))
+      {
+        var nativeEnumerable = new NativeEnumerable<long>((long*) array.GetUnsafePtr(), array.Length);
+        Assert.AreEqual(count, nativeEnumerable.Length);
+        for (var i = 0L; i < count; i++)
+            nativeEnumerable[i] = i;
+        var index = 0L;
+        foreach (ref var i in nativeEnumerable)
+        {
+            Assert.AreEqual(index++, i);
+            i = index;
+        }
+        index = 1L;
+        foreach (var i in nativeEnumerable)
+            Assert.AreEqual(index++, i);
+      }
     }
   }
 }
