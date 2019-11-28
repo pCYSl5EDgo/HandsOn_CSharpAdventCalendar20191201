@@ -23,7 +23,7 @@ namespace Tests
     {
       using (var array = new NativeArray<int>(1, Allocator.Persistent))
       {
-        // Assert.IsFalse(array.GetUnsafePtr() == null);
+        Assert.IsFalse(array.GetUnsafePtr() == null);
         // var nativeEnumerable = new NativeEnumerable<int>((int*) array.GetUnsafePtr(), count);
         // Assert.AreEqual(0L, nativeEnumerable.Length);
         // Assert.IsTrue(nativeEnumerable.Ptr == null);  
