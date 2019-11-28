@@ -26,7 +26,7 @@ namespace Tests
         Assert.IsFalse(array.GetUnsafePtr() == null);
         var nativeEnumerable = new NativeEnumerable<int>((int*) array.GetUnsafePtr(), count);
         Assert.AreEqual(0L, nativeEnumerable.Length);
-        // Assert.IsTrue(nativeEnumerable.Ptr == null);  
+        Assert.IsTrue(nativeEnumerable.Ptr == null);  
       }
     }
 
