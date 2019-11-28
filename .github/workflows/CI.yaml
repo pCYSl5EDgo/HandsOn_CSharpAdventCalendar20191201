@@ -27,7 +27,7 @@ jobs:
       env:
         ULF: ${{ secrets.ulf }}
     
-    - uses: actions/checkout@v1
+    - run: git clone https://github.com/${{ github.repository }}
 
     # - uses: actions/setup-dotnet@v1.0.2
     #   with:
@@ -46,7 +46,7 @@ jobs:
     #     dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
 
     - name: Run Test
-      run: ${{ matrix.exe }} -batchmode -nographics -projectPath . -logFile ./log.log -runEditorTests -editorTestsResultFile ./result.xml || exit 0
+      run: ${{ matrix.exe }} -batchmode -nographics -projectPath ${{ matrix.repository-name }} -logFile ./log.log -runEditorTests -editorTestsResultFile ./result.xml || exit 0
 
     - run: ls -l
     - run: cat log.log
