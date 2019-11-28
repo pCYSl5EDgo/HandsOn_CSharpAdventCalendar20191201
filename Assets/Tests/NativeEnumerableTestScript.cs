@@ -51,7 +51,7 @@ namespace Tests
         for (var i = 0; i < count; i++)
         {
           Assert.AreEqual(0, nativeEnumerable[i]);
-          //nativeEnumerable[i] = i;
+          nativeEnumerable[i] = i;
         }
       //   for (var i = 0; i < count; i++)
       //     Assert.AreEqual(i, array[i]);
