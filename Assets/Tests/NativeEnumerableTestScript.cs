@@ -11,9 +11,9 @@ namespace Tests
     }
 
     [TestCase(0L)]
-    // [TestCase(-10L)]
-    // [TestCase(-12241L)]
-    // [TestCase(long.MinValue)]
+    [TestCase(-10L)]
+    [TestCase(-12241L)]
+    [TestCase(long.MinValue)]
     public void ZeroOrNegativeCountTest(long a)
     {
       
