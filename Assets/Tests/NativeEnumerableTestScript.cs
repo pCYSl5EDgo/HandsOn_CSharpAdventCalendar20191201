@@ -46,8 +46,8 @@ namespace Tests
     {
       using (var array = new NativeArray<int>(count, allocator))
       {
-      //   var nativeEnumerable = new NativeEnumerable<int>((int*) array.GetUnsafePtr(), array.Length);
-      //   Assert.AreEqual((long)count, nativeEnumerable.Length);
+        var nativeEnumerable = new NativeEnumerable<int>((int*) array.GetUnsafePtr(), array.Length);
+        Assert.AreEqual((long)count, nativeEnumerable.Length);
       //   for (var i = 0; i < nativeEnumerable.Length; i++)
       //   {
       //     Assert.AreEqual(0, nativeEnumerable[i]);
