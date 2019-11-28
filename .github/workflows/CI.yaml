@@ -1,0 +1,107 @@
+name: CreateRelease
+
+on:
+  push:
+    branches:
+    - develop
+
+jobs:
+  buildReleaseJob:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        unity-version: [2018.4.9f1]
+        user-name: [pCYSl5EDgo]
+        repository-name: [HandsOn_CSharpAdventCalendar20191201]
+        exe: ['/opt/Unity/Editor/Unity']
+
+    steps:
+    - uses: pCYSl5EDgo/setup-unity@master
+      with:
+        unity-version: ${{ matrix.unity-version }}
+
+    - name: License Activation
+      run: |
+        echo -n "$ULF" > unity.ulf
+        ${{ matrix.exe }} -nographics -batchmode -quit -logFile -manualLicenseFile ./unity.ulf || exit 0
+      env:
+        ULF: ${{ secrets.ulf }}
+    
+    - uses: actions/checkout@v1
+
+    - uses: actions/setup-dotnet@v1.0.2
+      with:
+        dotnet-version: '3.0.101'
+
+    - name: Builds DLL
+      run: |
+        mkdir artifact
+        cd core~
+        cp -f core~.csproj.txt core~.csproj
+        dotnet build -c Release
+        
+    - name: Post Process DLL
+      run: |
+        cd post~
+        dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
+
+    - name: Run Test
+      run: ${{ matrix.exe }} -batchmode -nographics -projectPath . -logFile ./log.log -runEditorTests -editorTestsResultFile ./result.xml || exit 0
+
+    - run: ls -l
+    - run: cat log.log
+    - run: cat result.xml
+        
+    - uses: pCYSl5EDgo/Unity-Test-Runner-Result-XML-interpreter@master
+      id: interpret
+      with:
+        path: result.xml
+
+    - if: steps.interpret.outputs.success != 'true'
+      run: exit 1
+
+    - name: Get Version
+      run: |
+        cd ${{ matrix.repository-name }}
+        git describe --tags 1> ../version 2> ../error || exit 0
+
+    - name: Cat Error
+      uses: pCYSl5EDgo/cat@master
+      id: error
+      with:
+        path: error
+    
+    - if: startsWith(steps.error.outputs.text, 'fatal') != 'true'
+      run: |
+        cat version
+        cat version | awk '{ split($0, versions, "-"); split(versions[1], numbers, "."); numbers[3]=numbers[3]+1; variable=numbers[1]"."numbers[2]"."numbers[3]; print variable; }' > version_increment
+
+    - if: startsWith(steps.error.outputs.text, 'fatal')
+      run: echo -n "0.0.1" > version_increment
+
+    - name: Cat
+      uses: pCYSl5EDgo/cat@master
+      id: version
+      with:
+        path: version_increment
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.text }}
+        release_name: Release Unity${{ matrix.unity-version }} - v${{ steps.version.outputs.text }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload DLL
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Assets/Plugins/UNL/UniNativeLinq.dll
+        asset_name: UniNativeLinq.dll
+        asset_content_type: application/vnd.microsoft.portable-executable

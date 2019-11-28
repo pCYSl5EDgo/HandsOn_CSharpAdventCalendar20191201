@@ -1,0 +1,14 @@
+[Ll]ibrary/
+[Ll]ogs/
+[Oo]bj/
+Temp/
+.idea/
+.vs/
+.vscode/
+/*.csproj
+/*.sln
+/*.sln.user
+/TestResults-*.xml
+result.xml
+unity.ulf
+Unity_*.alf
