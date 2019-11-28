@@ -3,12 +3,14 @@ using Unity.Collections;
 
 namespace Tests
 {
-    public sealed unsafe class NativeEnumerableTestScript
+  public sealed unsafe class NativeEnumerableTestScript
   {
     [Test]
     public void DefaultValuePass()
     {
-      
+      NativeEnumerable<int> nativeEnumerable = default;
+      Assert.AreEqual(0L, nativeEnumerable.Length);
+      Assert.IsTrue(nativeEnumerable.Ptr == null);
     }
 
     [TestCase(0L)]
