@@ -33,12 +33,10 @@ jobs:
       with:
         dotnet-version: '3.0.101'
 
-    # - name: Builds DLL
-    #   run: |
-    #     mkdir artifact
-    #     cd core~
-    #     cp -f core~.csproj.txt core~.csproj
-    #     dotnet build -c Release
+    - name: Builds DLL
+      run: |
+        cd core~
+        dotnet build -c Release
         
     # - name: Post Process DLL
     #   run: |

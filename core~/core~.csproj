@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>UniNativeLinq</RootNamespace>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <LangVersion>8</LangVersion>
+    <AssemblyName>UniNativeLinq</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath Condition="Exists('C:\Users\conve')">C:\Users\conve\Documents\Unity\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath Condition="Exists('/opt/Unity/Editor/Unity')">/opt/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
