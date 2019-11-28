@@ -35,12 +35,12 @@ jobs:
 
     - name: Builds DLL
       run: |
-        cd core~
+        cd ${{ matrix.repository-name }}/core~
         dotnet build -c Release
         
     - name: Post Process DLL
       run: |
-        cd post~
+        cd ${{ matrix.repository-name }}/post~
         ls -l ../Assets/Plugins/UNL/
         dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
         ls -l ../Assets/Plugins/UNL/
