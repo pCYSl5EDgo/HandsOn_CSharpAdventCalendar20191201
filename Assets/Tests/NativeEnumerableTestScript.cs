@@ -48,11 +48,11 @@ namespace Tests
       {
         var nativeEnumerable = new NativeEnumerable<int>((int*) array.GetUnsafePtr(), array.Length);
         Assert.AreEqual((long)count, nativeEnumerable.Length);
-      //   for (var i = 0; i < nativeEnumerable.Length; i++)
-      //   {
-      //     Assert.AreEqual(0, nativeEnumerable[i]);
-      //     nativeEnumerable[i] = i;
-      //   }
+        for (var i = 0; i < count; i++)
+        {
+          Assert.AreEqual(0, nativeEnumerable[i]);
+          //nativeEnumerable[i] = i;
+        }
       //   for (var i = 0; i < count; i++)
       //     Assert.AreEqual(i, array[i]);
       }
