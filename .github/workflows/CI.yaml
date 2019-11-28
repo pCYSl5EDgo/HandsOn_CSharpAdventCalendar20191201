@@ -38,10 +38,12 @@ jobs:
         cd core~
         dotnet build -c Release
         
-    # - name: Post Process DLL
-    #   run: |
-    #     cd post~
-    #     dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
+    - name: Post Process DLL
+      run: |
+        cd post~
+        ls -l ../Assets/Plugins/UNL/
+        dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
+        ls -l ../Assets/Plugins/UNL/
 
     - name: Run Test
       run: ${{ matrix.exe }} -batchmode -nographics -projectPath ${{ matrix.repository-name }} -logFile ./log.log -runEditorTests -editorTestsResultFile ../result.xml || exit 0
