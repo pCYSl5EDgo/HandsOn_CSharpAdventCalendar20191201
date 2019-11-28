@@ -29,21 +29,21 @@ jobs:
     
     - uses: actions/checkout@v1
 
-    - uses: actions/setup-dotnet@v1.0.2
-      with:
-        dotnet-version: '3.0.101'
+    # - uses: actions/setup-dotnet@v1.0.2
+    #   with:
+    #     dotnet-version: '3.0.101'
 
-    - name: Builds DLL
-      run: |
-        mkdir artifact
-        cd core~
-        cp -f core~.csproj.txt core~.csproj
-        dotnet build -c Release
+    # - name: Builds DLL
+    #   run: |
+    #     mkdir artifact
+    #     cd core~
+    #     cp -f core~.csproj.txt core~.csproj
+    #     dotnet build -c Release
         
-    - name: Post Process DLL
-      run: |
-        cd post~
-        dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
+    # - name: Post Process DLL
+    #   run: |
+    #     cd post~
+    #     dotnet run ../core~/bin/Release/netstandard2.0/UniNativeLinq.dll ../Assets/Plugins/UNL/UniNativeLinq.dll
 
     - name: Run Test
       run: ${{ matrix.exe }} -batchmode -nographics -projectPath . -logFile ./log.log -runEditorTests -editorTestsResultFile ./result.xml || exit 0
@@ -85,23 +85,23 @@ jobs:
       with:
         path: version_increment
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.version.outputs.text }}
-        release_name: Release Unity${{ matrix.unity-version }} - v${{ steps.version.outputs.text }}
-        draft: false
-        prerelease: false
+    # - name: Create Release
+    #   id: create_release
+    #   uses: actions/create-release@v1.0.0
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ steps.version.outputs.text }}
+    #     release_name: Release Unity${{ matrix.unity-version }} - v${{ steps.version.outputs.text }}
+    #     draft: false
+    #     prerelease: false
     
-    - name: Upload DLL
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Assets/Plugins/UNL/UniNativeLinq.dll
-        asset_name: UniNativeLinq.dll
-        asset_content_type: application/vnd.microsoft.portable-executable
+    # - name: Upload DLL
+    #   uses: actions/upload-release-asset@v1.0.1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: Assets/Plugins/UNL/UniNativeLinq.dll
+    #     asset_name: UniNativeLinq.dll
+    #     asset_content_type: application/vnd.microsoft.portable-executable
