@@ -10,7 +10,9 @@
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": true,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        "UniNativeLinq.dll"
+    ],
     "autoReferenced": true,
     "defineConstraints": []
 }
