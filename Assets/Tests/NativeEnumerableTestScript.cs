@@ -92,13 +92,13 @@ namespace Tests
       public void Execute(ref long arg, ref long result) => result = arg * 3;
     }
 
-    [TestCase(114, Allocator.Temp)]
-    [TestCase(114, Allocator.TempJob)]
-    [TestCase(114, Allocator.Persistent)]
-    public void SelectOperatorTest(int count, Allocator allocator)
-    {
-      using (var array = new NativeArray<long>(count, allocator))
-      {
+    // [TestCase(114, Allocator.Temp)]
+    // [TestCase(114, Allocator.TempJob)]
+    // [TestCase(114, Allocator.Persistent)]
+    // public void SelectOperatorTest(int count, Allocator allocator)
+    // {
+      // using (var array = new NativeArray<long>(count, allocator))
+      // {
         // var nativeEnumerable = new NativeEnumerable<long>((long*) array.GetUnsafePtr(), array.Length);
         // for (var i = 0L; i < count; i++)
         //   nativeEnumerable[i] = i;
@@ -109,7 +109,7 @@ namespace Tests
         //   Assert.AreEqual(assertNumber, item);
         //   assertNumber += 3;
         // }
-      }
-    }
+      // }
+    // }
   }
 }
