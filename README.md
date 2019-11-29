@@ -4,8 +4,7 @@
 
  - Mono.Cecilの使い方に慣れる
   - Mono.Cecil使い増えろ
- - LINQの内部実装についての理解を深める
- - Unityのエディタ拡張に慣れる
+ - LINQの内部実装についての初歩の理解を得る
  - マネージドプラグイン開発に慣れる
  - GitHub Actionsに慣れる
  - UniNativeLinqのファンになる
@@ -415,7 +414,11 @@ git push -u origin develop
 これからGitHub ReleasesでUniNativeLinq.dllをpush時に自動的に公開する仕組みを作ります。その際にテストも走らせ、テスト失敗時はリリースしないようにします。
 
 <details><summary>GitHub ActionsでUnityを使うための下拵え　[参考文献：GitHub ActionsでUnity開発](https://qiita.com/pCYSl5EDgo/items/690dd56ffb0fcf64e70b)</summary><div>GitHub ActionsではLinux, Windows, MacOSXの３種類の環境でCI/CDを行うことができます。
-CI/CDからUnityを利用する場合にはLinux環境で[gableroux氏の提供する適切なバージョンのUnityを含むDockerイメージ](https://hub.docker.com/r/gableroux/unity3d/tags)を利用する形になります。
+CI/CDサービスからUnityを利用する場合にはLinux環境を利用する形になります。
+<details><summary>なぜWindowsやMacではなくLinuxなのかについての補足</summary><div>WindowsやMacOS環境でも[pCYSl5EDgo/setup-unity](https://github.com/pCYSl5EDgo/setup-unity)というGitHub Actionを利用してUnityをインストール可能です。
+WinやMacはVMインスタンスとして立ち上がるので、ジョブ毎にMachine IDが変化します。
+困ったことに後述するalfファイルの項目にMachine IDがありまして、ここがulfにも受け継がれてしまい、不一致だと認証にコケるのです。
+故にulfファイルを使用してオフライン認証を行う手法をWindowsとMacOS環境では取り得ません。</div></details>
 
 Unityを利用するためには必ずメールアドレスとパスワードで認証する必要があります。
 CUIで認証する場合には[オフライン/ 手動アクティベーション](https://docs.unity3d.com/ja/2017.4/Manual/ManualActivationGuide.html)を行う方がパスワード漏洩対策として安全です。
@@ -1487,15 +1490,9 @@ private readonly struct TripleAction : IRefAction<long, long>
   public void Execute(ref long arg, ref long result) => result = arg * 3;
 }
 
-[TestCase(0, Allocator.Temp)]
 [TestCase(114, Allocator.Temp)]
-[TestCase(1145, Allocator.Temp)]
-[TestCase(0, Allocator.TempJob)]
 [TestCase(114, Allocator.TempJob)]
-[TestCase(1145, Allocator.TempJob)]
-[TestCase(0, Allocator.Persistent)]
 [TestCase(114, Allocator.Persistent)]
-[TestCase(1145, Allocator.Persistent)]
 public void SelectOperatorTest(int count, Allocator allocator)
 {
   using (var array = new NativeArray<long>(count, allocator))
@@ -1505,7 +1502,7 @@ public void SelectOperatorTest(int count, Allocator allocator)
       nativeEnumerable[i] = i;
     var selectEnumerable = new SelectEnumerable<NativeEnumerable<long>, NativeEnumerable<long>.Enumerator, long, long, TripleAction>(nativeEnumerable);
     var assertNumber = 0L;
-    foreach (var item in selectEnumerable)
+    foreach (ref var item in selectEnumerable)
     {
       Assert.AreEqual(assertNumber, item);
       assertNumber += 3;
@@ -1518,5 +1515,12 @@ public void SelectOperatorTest(int count, Allocator allocator)
 そしてせこせこ5つ型引数を設定してSelectEnumerableをnewします。
 foreach中できちんと元のソースの3倍になっていることを確認できていますね。
 </div></details>
+
+# 終わりに
+
+[UniNativeLinq本家](https://github.com/pCYSl5EDgo/UniNativeLinq-EditorExtension)ではエディタ拡張に関連して更にえげつない最適化やMono.Cecilテクニックが使用されています。
+既存のLINQに比べて非常に高速に動作しますので是非使ってください。
+
+このハンズオンよりも更に深くMono.CecilやUniNativeLinqを学びたいという方は[私のTwitter](https://twitter.com/pCYSl5EDgo)のDMなどでご相談いただければ嬉しいです。
 
 [^1]: 画像はUnityのサイトより引用
