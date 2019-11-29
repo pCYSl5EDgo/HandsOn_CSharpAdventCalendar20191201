@@ -92,15 +92,9 @@ namespace Tests
       public void Execute(ref long arg, ref long result) => result = arg * 3;
     }
 
-    [TestCase(0, Allocator.Temp)]
     [TestCase(114, Allocator.Temp)]
-    [TestCase(1145, Allocator.Temp)]
-    [TestCase(0, Allocator.TempJob)]
     [TestCase(114, Allocator.TempJob)]
-    [TestCase(1145, Allocator.TempJob)]
-    [TestCase(0, Allocator.Persistent)]
     [TestCase(114, Allocator.Persistent)]
-    [TestCase(1145, Allocator.Persistent)]
     public void SelectOperatorTest(int count, Allocator allocator)
     {
       using (var array = new NativeArray<long>(count, allocator))
@@ -110,7 +104,7 @@ namespace Tests
           nativeEnumerable[i] = i;
         var selectEnumerable = new SelectEnumerable<NativeEnumerable<long>, NativeEnumerable<long>.Enumerator, long, long, TripleAction>(nativeEnumerable);
         var assertNumber = 0L;
-        foreach (var item in selectEnumerable)
+        foreach (ref var item in selectEnumerable)
         {
           Assert.AreEqual(assertNumber, item);
           assertNumber += 3;
