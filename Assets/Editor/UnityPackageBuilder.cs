@@ -1,9 +1,16 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
+using UnityEngine;
 namespace AAA
 {
     public static class UnityPackageBuilder
     {
+        [RuntimeInitializeOnLoadMethod]
+        public static void AAA()
+        {
+            File.WriteAllText("../BBB.txt", "Hello, world\n" + Guid.NewGuid().ToString());
+        }
         public static void Build()
         {
             var args = Environment.GetCommandLineArgs();
