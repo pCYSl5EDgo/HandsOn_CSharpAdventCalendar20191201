@@ -60,6 +60,10 @@ jobs:
     - if: steps.interpret.outputs.success != 'true'
       run: exit 1
 
+    - name: Create UnityPackage
+      run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod UnityPackageBuilder.Build
+    - run: cat log.log
+
     - name: Get Version
       run: |
         cd ${{ matrix.repository-name }}
@@ -85,23 +89,32 @@ jobs:
       with:
         path: version_increment
 
-    # - name: Create Release
-    #   id: create_release
-    #   uses: actions/create-release@v1.0.0
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     tag_name: ${{ steps.version.outputs.text }}
-    #     release_name: Release Unity${{ matrix.unity-version }} - v${{ steps.version.outputs.text }}
-    #     draft: false
-    #     prerelease: false
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.text }}
+        release_name: Release Unity${{ matrix.unity-version }} - v${{ steps.version.outputs.text }}
+        draft: false
+        prerelease: false
     
-    # - name: Upload DLL
-    #   uses: actions/upload-release-asset@v1.0.1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ${{ matrix.repository-name }}/Assets/Plugins/UNL/UniNativeLinq.dll
-    #     asset_name: UniNativeLinq.dll
-    #     asset_content_type: application/vnd.microsoft.portable-executable
+    - name: Upload DLL
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ matrix.repository-name }}/Assets/Plugins/UNL/UniNativeLinq.dll
+        asset_name: UniNativeLinq.dll
+        asset_content_type: application/vnd.microsoft.portable-executable
+
+    - name: Upload Unity Package
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: UniNativeLinq.unitypackage
+        asset_content_type: application/x-gzip
