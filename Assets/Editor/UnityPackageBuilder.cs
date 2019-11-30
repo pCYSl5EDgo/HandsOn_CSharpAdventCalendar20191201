@@ -6,6 +6,10 @@ namespace HandsOn
 {
   public static class UnityPackageBuilder
   {
+    [RuntimeInitializeOnLoadMethod]
+    static void A(){
+      Debug.Log("AAAAA\n" + Assembly.GetExecutingAssembly().Location + "\n" + Environment.StackTrace);
+    }
     public static void Build()
     {
       Debug.Log("BUILD=LOCATION\n" + Assembly.GetExecutingAssembly().Location + "\n" + Environment.StackTrace);
