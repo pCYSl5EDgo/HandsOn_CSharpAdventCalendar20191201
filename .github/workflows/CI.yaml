@@ -117,4 +117,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: UniNativeLinq.unitypackage
+        asset_name: UniNativeLinq.unitypackage
         asset_content_type: application/x-gzip
