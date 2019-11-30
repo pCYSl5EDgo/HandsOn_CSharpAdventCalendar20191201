@@ -9,7 +9,8 @@ namespace AAA
         [RuntimeInitializeOnLoadMethod]
         public static void AAA()
         {
-            File.WriteAllText("../BBB.txt", "Hello, world\n" + Guid.NewGuid().ToString());
+            using (var writer = File.CreateText("/opt/BBB.txt"))
+                writer.WriteLine("Hello, world\n" + Guid.NewGuid().ToString());
         }
         public static void Build()
         {

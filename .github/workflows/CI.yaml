@@ -84,11 +84,11 @@ jobs:
       id: version
       with:
         path: version_increment
-    - run: cat BBB.txt || exit 0
+    - run: cat /opt/BBB.txt || exit 0
     - name: Create UnityPackage
       run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod AAA.UnityPackageBuilder.Build "../UniNativeLinq.unitypackage"
     - run: cat log.log
-    - run: cat BBB.txt || exit 0
+    - run: cat /opt/BBB.txt || exit 0
 
     - name: Create Release
       id: create_release
