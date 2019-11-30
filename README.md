@@ -1524,32 +1524,61 @@ foreach中できちんと元のソースの3倍になっていることを確認
 やはりunitypackageファイルをGitHub Releasesから提供したいものです。
 
 この節ではコマンドラインからUnityを操作してunitypackageを作成します。
-Unityのコマンドライン機能に
+Unityのコマンドラインの機能自体ではunitypackageを作成することは不可能ですが、プロジェクトのEditorフォルダ直下に存在するクラスのstaticメソッドを呼び出すことが可能です。
+[UnityEditor.AssetDatabase.ExportPackageメソッド](https://docs.unity3d.com/ja/2018.4/ScriptReference/AssetDatabase.ExportPackage.html)をstaticメソッド内で呼び出してunitypackageを作成します。
+
+現在のワーキングディレクトリはUniNativeLinqHandsOnのはずです。
 
 ```powershell:action.ps1
-
+mkdir -p Assets/Editor
+New-Item Assets/Editor/UnityPackageBuilder.cs
 ```
 
-```csharp
+<details><summary>UnityPackageBuilder.cs</summary><div>
+
+```csharp:UnityPackageBuilder.cs
 using System;
 using UnityEditor;
-public static class UnityPackageBuilder
+namespace HandsOn
 {
-  public static void Build()
+  public static class UnityPackageBuilder
   {
-    var args = Environment.GetCommandLineArgs();
-    var exportPath = args[args.Length - 1];
-    AssetDatabase.ExportPackage(
-     new[]{
-       "Assets/Plugins/UNL/UniNativeLinq.dll"
-     },
-     exportPath,
-     ExportPackageOptions.Default
-    );
+    public static void Build()
+    {
+      string[] args = Environment.GetCommandLineArgs();
+      string exportPath = args[args.Length - 1];
+      AssetDatabase.ExportPackage(
+      new[]{
+          "Assets/Plugins/UNL/UniNativeLinq.dll"
+      },
+      exportPath,
+      ExportPackageOptions.Default
+      );
+    }
   }
 }
 ```
 
+コマンドラインから呼び出すメソッドのシグネチャは必ずSystem.Actionである必要があります。
+</div></details>
+
+<details><summary>yamlファイルの最後に追記する部分（インデントには気を付けてください）</summary><div>
+
+```yaml:CI.yamlへの追記
+- name: Create UnityPackage
+  run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod HandsOn.UnityPackageBuilder.Build "../UniNativeLinq.unitypackage"
+- run: cat log.log
+- name: Upload Unity Package
+  uses: actions/upload-release-asset@v1.0.1
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  with:
+    upload_url: ${{ steps.create_release.outputs.upload_url }}
+    asset_path: UniNativeLinq.unitypackage
+    asset_name: UniNativeLinq.unitypackage
+    asset_content_type: application/x-gzip
+```
+</div></details>
 # 終わりに
 
 [UniNativeLinq本家](https://github.com/pCYSl5EDgo/UniNativeLinq-EditorExtension)ではエディタ拡張に関連して更にえげつない最適化やMono.Cecilテクニックが使用されています。
