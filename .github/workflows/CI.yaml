@@ -84,6 +84,9 @@ jobs:
       id: version
       with:
         path: version_increment
+    - name: Create UnityPackage
+      run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod AAA.UnityPackageBuilder.Build "../UniNativeLinq.unitypackage"
+    - run: cat log.log
 
     - name: Create Release
       id: create_release
@@ -106,9 +109,6 @@ jobs:
         asset_name: UniNativeLinq.dll
         asset_content_type: application/vnd.microsoft.portable-executable
 
-    - name: Create UnityPackage
-      run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod UnityPackageBuilder.Build "../UniNativeLinq.unitypackage"
-    - run: cat log.log
 
     - name: Upload Unity Package
       uses: actions/upload-release-asset@v1.0.1
