@@ -8,7 +8,7 @@ namespace HandsOn
   {
     public static void Build()
     {
-      Debug.Log("BUILD=LOCATION\n" + Assembly.GetExecutingAssembly().Location);
+      Debug.Log("BUILD=LOCATION\n" + Assembly.GetExecutingAssembly().Location + "\n" + Environment.StackTrace);
       var args = Environment.GetCommandLineArgs();
       var exportPath = args[args.Length - 1];
       AssetDatabase.ExportPackage(
