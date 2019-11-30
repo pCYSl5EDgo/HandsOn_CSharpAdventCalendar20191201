@@ -59,11 +59,7 @@ jobs:
 
     - if: steps.interpret.outputs.success != 'true'
       run: exit 1
-
-    - name: Create UnityPackage
-      run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod UnityPackageBuilder.Build
-    - run: cat log.log
-
+    
     - name: Get Version
       run: |
         cd ${{ matrix.repository-name }}
@@ -109,6 +105,10 @@ jobs:
         asset_path: ${{ matrix.repository-name }}/Assets/Plugins/UNL/UniNativeLinq.dll
         asset_name: UniNativeLinq.dll
         asset_content_type: application/vnd.microsoft.portable-executable
+
+    - name: Create UnityPackage
+      run: ${{ matrix.exe }} -batchmode -nographics -quit -projectPath ${{ matrix.repository-name }} -logFile ./log.log -executeMethod UnityPackageBuilder.Build "../UniNativeLinq.unitypackage"
+    - run: cat log.log
 
     - name: Upload Unity Package
       uses: actions/upload-release-asset@v1.0.1

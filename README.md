@@ -179,7 +179,7 @@ Unityのランタイムで使用される基本的な機能はUnityEngine.CoreMo
 
 以上で最初の下拵えを終わります。
 
-#第1章　UniNativeLinq-Coreの最低限の実装(1)
+# 第1章　UniNativeLinq-Coreの最低限の実装(1)
 
 現在の作業ディレクトリが&quot;UniNativeLinqHandsOn/core~&quot;であることを確認してください。
 
@@ -865,7 +865,7 @@ public unsafe struct Enumerator : IRefEnumerator<T>
 
 テストコードには何も差は生じません。（既存の実装を元にインターフェイスを抽出しただけですので）
 
-#第2章　初めてのAPI - Select
+# 第2章　初めてのAPI - Select
 LINQで一番使うAPIはSelectまたはWhereのはずです。
 今回はUniNativeLinqの特異性を学ぶのに好適であるため、Selectを実装してみます。
 
@@ -1515,6 +1515,15 @@ public void SelectOperatorTest(int count, Allocator allocator)
 そしてせこせこ5つ型引数を設定してSelectEnumerableをnewします。
 foreach中できちんと元のソースの3倍になっていることを確認できていますね。
 </div></details>
+
+# 第3章 補足
+
+## UnityPackage化
+
+ライブラリをGitHubから提供するならば素のDLLを提供するだけというのも不親切です。
+やはりunitypackageファイルをGitHub Releasesから提供したいものです。
+
+この節ではコマンドラインからUnityを操作してunitypackageを作成します。
 
 # 終わりに
 

@@ -5,9 +5,10 @@ public static class UnityPackageBuilder
 {
     public static void Build()
     {
-        const string exportPath = "../UniNativeLinq.unitypackage";
+        var args = Environment.GetCommandLineArgs();
+        var exportPath = args[args.Length - 1];
         AssetDatabase.ExportPackage(
-           new []{
+           new[]{
                "Assets/Plugins/UNL/UniNativeLinq.dll"
            },
            exportPath,
